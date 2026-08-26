@@ -1,0 +1,907 @@
+{
+  "server": {
+    "name": "Ourway – Camino de Santiago",
+    "version": "2.1.1",
+    "endpoint": "https://mcp.ourway.travel/mcp",
+    "description": "Plan, quote and book the Camino de Santiago with live accommodation availability: routes (Camino Francés, Portugués, Norte, Primitivo, Inglés, Vía de la Plata, Finisterre), official stages, hotels, luggage transfer, pilgrim extras, one all-in package price and a booking proposal link — plus a free Camino FAQ (credential, Compostela, best season, how many days from Sarria, Tui or Porto).",
+    "keywords": [
+      "Camino de Santiago",
+      "Way of St. James",
+      "Camino Francés",
+      "French Way",
+      "Camino Portugués",
+      "Portuguese Way",
+      "Portuguese Coastal Way",
+      "Camino del Norte",
+      "Camino Primitivo",
+      "Camino Inglés",
+      "Vía de la Plata",
+      "Finisterre",
+      "Muxía",
+      "Sarria",
+      "Tui",
+      "Porto",
+      "O Cebreiro",
+      "Roncesvalles",
+      "Saint-Jean-Pied-de-Port",
+      "Ferrol",
+      "Santiago de Compostela",
+      "pilgrimage",
+      "peregrinación",
+      "credencial",
+      "Compostela",
+      "luggage transfer",
+      "transporte de mochila",
+      "hotels",
+      "booking",
+      "travel",
+      "Spain",
+      "Galicia",
+      "hiking",
+      "walking holiday"
+    ]
+  },
+  "tools": [
+    {
+      "name": "camino_de_santiago_info",
+      "title": "Camino de Santiago info & FAQ",
+      "description": "Practical, up-to-date answers about the Camino de Santiago from\n        Ourway's specialist team — use it for ANY Camino question even when the\n        user is not booking: pilgrim credential (credencial), the Compostela\n        certificate and the 100 km / 200 km rule, best time of year and\n        weather, which route to choose (Camino Francés, Portugués Central or\n        Coastal from Porto/Tui, Norte, Primitivo, Inglés from Ferrol, Vía de la\n        Plata, Finisterre-Muxía), how many days from Sarria / Tui / Porto /\n        Roncesvalles / Saint-Jean-Pied-de-Port / Oviedo, daily distances and\n        difficulty, luggage & backpack transfer, what to pack, walking with\n        kids or seniors, cycling the Camino, pets, accommodation types\n        (albergues, hostales, hotels, casas rurales), budget, how far ahead to\n        book, getting to the start and back from Santiago, safety, food\n        (pilgrim menu) and etiquette. `question`: free text in any language;\n        `idioma`: es | en (auto-detected if omitted). Cheap and instant (no\n        availability check). / Respuestas prácticas del equipo Ourway sobre el\n        Camino de Santiago: credencial, Compostela, 100 km, mejor época, qué\n        ruta elegir, etapas, mochila, niños, bici, mascotas, presupuesto…\n        Úsala ante cualquier duda sobre el Camino aunque el usuario no quiera\n        reservar. (es: info_camino)",
+      "input_schema": {
+        "properties": {
+          "question": {
+            "title": "Question",
+            "type": "string"
+          },
+          "idioma": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Idioma"
+          }
+        },
+        "required": [
+          "question"
+        ],
+        "title": "camino_de_santiago_infoArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "camino_de_santiago_infoDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false
+      }
+    },
+    {
+      "name": "list_camino_routes",
+      "title": "Camino de Santiago routes",
+      "description": "List the Camino de Santiago routes Ourway sells and can book: Camino\n        Francés (French Way), Camino Portugués (Central & Coastal), Camino del\n        Norte, Camino Primitivo, Camino Inglés, Vía de la Plata / Sanabrés,\n        Finisterre-Muxía and more, with slug, name and total km. Start here for\n        any Camino de Santiago trip question (\"which Camino should I walk?\",\n        \"routes from Porto / Sarria / Tui\"). `tipo`: a_pie (walking) |\n        en_bicicleta (cycling) | a_caballo. / Lista los Caminos de Santiago que\n        Ourway comercializa: solo estos son reservables. Nunca redactes tú el\n        itinerario: usa plan_camino_itinerary. (es: listar_caminos)",
+      "input_schema": {
+        "properties": {
+          "tipo": {
+            "default": "a_pie",
+            "title": "Tipo",
+            "type": "string"
+          }
+        },
+        "title": "list_camino_routesArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "list_camino_routesDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false
+      }
+    },
+    {
+      "name": "camino_route_towns",
+      "title": "Towns along a Camino route",
+      "description": "Towns along a Camino de Santiago route in trail order (Sarria,\n        Portomarín, O Cebreiro, Tui, Porto, Roncesvalles, Ferrol…), with id,\n        name, cumulative km and GPS coordinates. Use it to pick the starting\n        town (`poblacion_inicio_id` for plan_camino_itinerary), to check where\n        the 100 km Compostela threshold falls, and to validate overnight stops.\n        / Poblaciones de un camino en orden de trazado con km acumulados y\n        coordenadas. Nunca redactes tú las etapas: usa plan_camino_itinerary.\n        (es: poblaciones_ruta)",
+      "input_schema": {
+        "properties": {
+          "camino_slug": {
+            "title": "Camino Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "camino_slug"
+        ],
+        "title": "camino_route_townsArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "camino_route_townsDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false
+      }
+    },
+    {
+      "name": "plan_camino_itinerary",
+      "title": "Plan a Camino itinerary (stages + map)",
+      "description": "Build a day-by-day Camino de Santiago itinerary (walking stages,\n        km per day, overnight towns, dates, route map image) following the\n        camino's OFFICIAL stages adapted to the pilgrim's daily pace. ALWAYS use\n        this tool for any Camino itinerary, stage plan or \"how many days from\n        Sarria/Tui/Porto/Roncesvalles\" question — never draft stages yourself.\n        `ritmo`: tranquilo (18-22 km/day) | medio (22-28) | experimentado\n        (28-35); use `km_max_etapa` instead for an explicit km cap or cycling\n        (~2x). `fecha_inicio` (YYYY-MM-DD, first night) is optional: without it\n        dates come back \"to be confirmed\" — call it anyway. Only pass\n        `num_noches` when the client fixes the number of nights. Returns\n        `mapa_url`: a real PNG map of the route with numbered overnight stops —\n        show it in the chat right after the stage table (`![Mapa](mapa_url)`).\n        / ÚNICA fuente del itinerario: llámala SIEMPRE que haya que proponer o\n        revisar etapas, aunque el cliente aún no tenga fecha. Nunca redactes\n        etapas, km, tiempos o dificultades por tu cuenta. Presenta el\n        itinerario y pide confirmación ANTES de cotizar. (es: proponer_itinerario)",
+      "input_schema": {
+        "properties": {
+          "camino_slug": {
+            "title": "Camino Slug",
+            "type": "string"
+          },
+          "poblacion_inicio_id": {
+            "title": "Poblacion Inicio Id",
+            "type": "integer"
+          },
+          "fecha_inicio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Fecha Inicio"
+          },
+          "ritmo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Ritmo"
+          },
+          "num_noches": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Num Noches"
+          },
+          "poblacion_destino_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Poblacion Destino Id"
+          },
+          "km_max_etapa": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Km Max Etapa"
+          }
+        },
+        "required": [
+          "camino_slug",
+          "poblacion_inicio_id"
+        ],
+        "title": "plan_camino_itineraryArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "plan_camino_itineraryDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false
+      }
+    },
+    {
+      "name": "quote_camino_package",
+      "title": "Quote a Camino package (official Ourway price)",
+      "description": "Quote a complete Camino de Santiago trip as ONE all-in package price\n        (hotels night by night with LIVE availability + pilgrim extras) — the\n        only valid source of Ourway prices. Use it whenever the user asks how\n        much a Camino costs, wants a quote, or approves an itinerary from\n        plan_camino_itinerary. It auto-selects the best accommodation for each\n        night (Ourway quality filters: verified meal plan, close to the centre,\n        guest rating) and returns a single `total_paquete_eur`. NEVER returns\n        per-hotel, per-night or per-extra prices. `presupuesto` is REQUIRED\n        (per person, whole trip, EUR): sin_preferencia | lt_500 | 500_1000 |\n        1000_1500 | gt_1500. `meal_plan`: RO | BB | HB | FB.\n        `categoria_alojamiento`: recomendado | hoteles_encanto | casas_rurales\n        | albergues. `extras_ids` from camino_extras_catalog (default: pilgrim\n        credential + insurance; luggage transfer if incluir_mochila=true).\n        ALWAYS pass `nacionalidad` (or `residente_espana`): it sets the\n        insurance. `mascotas=true` when travelling with a pet. If a category\n        has no availability one night the best alternative category is chosen\n        (see `avisos`). Keep `oferta_paquete_firmada` verbatim for\n        create_camino_booking_proposal. Can take 1-3 minutes (live checks\n        hotel by hotel): warn the user. / ÚNICA fuente de precio: un solo\n        importe total del paquete, nunca precios parciales. Sin presupuesto no\n        se cotiza. (es: cotizar_paquete)",
+      "input_schema": {
+        "$defs": {
+          "EtapaPaquete": {
+            "properties": {
+              "noche_num": {
+                "minimum": 1,
+                "title": "Noche Num",
+                "type": "integer"
+              },
+              "poblacion_id": {
+                "description": "ID de la población de pernocta (de camino_route_towns / plan_camino_itinerary)",
+                "title": "Poblacion Id",
+                "type": "integer"
+              },
+              "fecha_entrada": {
+                "description": "YYYY-MM-DD",
+                "title": "Fecha Entrada",
+                "type": "string"
+              },
+              "fecha_salida": {
+                "description": "YYYY-MM-DD (normalmente el día siguiente)",
+                "title": "Fecha Salida",
+                "type": "string"
+              }
+            },
+            "required": [
+              "noche_num",
+              "poblacion_id",
+              "fecha_entrada",
+              "fecha_salida"
+            ],
+            "title": "EtapaPaquete",
+            "type": "object"
+          },
+          "HabitacionOcupacion": {
+            "description": "Ocupación de UNA habitación.",
+            "properties": {
+              "adults": {
+                "description": "Adultos en esta habitación",
+                "maximum": 6,
+                "minimum": 1,
+                "title": "Adults",
+                "type": "integer"
+              },
+              "children_ages": {
+                "description": "Edades de los niños en esta habitación, ej [5, 8]",
+                "items": {
+                  "type": "integer"
+                },
+                "title": "Children Ages",
+                "type": "array"
+              }
+            },
+            "required": [
+              "adults"
+            ],
+            "title": "HabitacionOcupacion",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "etapas": {
+            "items": {
+              "$ref": "#/$defs/EtapaPaquete"
+            },
+            "title": "Etapas",
+            "type": "array"
+          },
+          "habitaciones": {
+            "items": {
+              "$ref": "#/$defs/HabitacionOcupacion"
+            },
+            "title": "Habitaciones",
+            "type": "array"
+          },
+          "presupuesto": {
+            "title": "Presupuesto",
+            "type": "string"
+          },
+          "meal_plan": {
+            "default": "BB",
+            "title": "Meal Plan",
+            "type": "string"
+          },
+          "categoria_alojamiento": {
+            "default": "recomendado",
+            "title": "Categoria Alojamiento",
+            "type": "string"
+          },
+          "extras_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Extras Ids"
+          },
+          "nacionalidad": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Nacionalidad"
+          },
+          "incluir_mochila": {
+            "default": false,
+            "title": "Incluir Mochila",
+            "type": "boolean"
+          },
+          "residente_espana": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Residente Espana"
+          },
+          "mascotas": {
+            "default": false,
+            "title": "Mascotas",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "etapas",
+          "habitaciones",
+          "presupuesto"
+        ],
+        "title": "quote_camino_packageArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "quote_camino_packageDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": false,
+        "open_world_hint": true
+      }
+    },
+    {
+      "name": "camino_hotel_alternatives",
+      "title": "Alternative hotels for one night",
+      "description": "Up to 3 alternative hotels for ONE night of a quoted Camino de\n        Santiago package, each with the change in the package total\n        (`variacion_total_eur`), room, meal plan and distance to the centre.\n        Use it when the client wants a different hotel in a town — do NOT\n        re-quote the whole trip. Then apply the choice with swap_camino_hotel\n        (`alternativa_id`). / Alternativas para una noche a partir de la\n        disponibilidad ya consultada; nunca precios por noche.\n        (es: alternativas_alojamiento)",
+      "input_schema": {
+        "properties": {
+          "oferta_paquete_firmada": {
+            "title": "Oferta Paquete Firmada",
+            "type": "string"
+          },
+          "noche_num": {
+            "title": "Noche Num",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "oferta_paquete_firmada",
+          "noche_num"
+        ],
+        "title": "camino_hotel_alternativesArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "camino_hotel_alternativesDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false
+      }
+    },
+    {
+      "name": "adjust_camino_package",
+      "title": "Adjust the package (cheaper, upgrade, more central, breakfast)",
+      "description": "Propose per-night hotel swaps on a quoted Camino de Santiago package\n        to reach a goal: cheaper, higher category, closer to the town centre or\n        with breakfast. `objetivo`: bajar_precio | subir_categoria |\n        mas_centrico | con_desayuno; optional `noche_num` to limit to one\n        night. Use it when the client asks to LOWER THE PRICE, UPGRADE, sleep\n        MORE CENTRAL or ADD BREAKFAST — do not re-quote. Returns each proposal\n        with its change in the total and the total if all are applied; apply\n        accepted ones one by one with swap_camino_hotel, chaining the new\n        offer. If there are no proposals, offer to re-quote with another\n        category/itinerary. (es: ajustar_paquete)",
+      "input_schema": {
+        "properties": {
+          "oferta_paquete_firmada": {
+            "title": "Oferta Paquete Firmada",
+            "type": "string"
+          },
+          "objetivo": {
+            "title": "Objetivo",
+            "type": "string"
+          },
+          "noche_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Noche Num"
+          }
+        },
+        "required": [
+          "oferta_paquete_firmada",
+          "objetivo"
+        ],
+        "title": "adjust_camino_packageArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "adjust_camino_packageDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false
+      }
+    },
+    {
+      "name": "swap_camino_hotel",
+      "title": "Swap the hotel of one night",
+      "description": "Apply one alternative from camino_hotel_alternatives or\n        adjust_camino_package to a quoted Camino de Santiago package and get a\n        NEW signed offer (`oferta_paquete_firmada`) with the new package total.\n        Always use the most recent offer for create_camino_booking_proposal.\n        / Sustituye el hotel de esa noche y devuelve una nueva oferta firmada\n        con el nuevo total. (es: cambiar_alojamiento)",
+      "input_schema": {
+        "properties": {
+          "oferta_paquete_firmada": {
+            "title": "Oferta Paquete Firmada",
+            "type": "string"
+          },
+          "noche_num": {
+            "title": "Noche Num",
+            "type": "integer"
+          },
+          "alternativa_id": {
+            "title": "Alternativa Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "oferta_paquete_firmada",
+          "noche_num",
+          "alternativa_id"
+        ],
+        "title": "swap_camino_hotelArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "swap_camino_hotelDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": false,
+        "idempotent_hint": false,
+        "open_world_hint": false
+      }
+    },
+    {
+      "name": "camino_extras_catalog",
+      "title": "Pilgrim extras catalog",
+      "description": "Official Ourway catalog of pilgrim extras for the Camino de Santiago:\n        pilgrim credential (credencial), travel insurance, luggage / backpack\n        transfer between stages, guided visits and activities. No unit prices\n        (extras are folded into the package total via\n        quote_camino_package(extras_ids=…)). `preseleccionado` marks the\n        defaults (credential + insurance by nationality). The ONLY extras that\n        may be offered. / Extras oficiales del catálogo, sin precio unitario y\n        sin mostrar IDs. (es: catalogo_extras)",
+      "input_schema": {
+        "properties": {
+          "nacionalidad": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Nacionalidad"
+          }
+        },
+        "title": "camino_extras_catalogArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "camino_extras_catalogDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false
+      }
+    },
+    {
+      "name": "camino_trip_intake_form",
+      "title": "Tailor-made Camino intake form",
+      "description": "Intake form contract for a tailor-made Camino de Santiago trip: the\n        fields to collect conversationally from the customer BEFORE quoting\n        anything (rooms with children's ages, nationality/residence, start date\n        and nights, walking or cycling, route and starting town, daily pace,\n        accommodation category, meal plan, luggage transfer, pets, budget per\n        person, comments). Call it at the start of any planning request.\n        / Espejo del formulario 'Camino a medida' de ourway.travel. No llames a\n        quote_camino_package sin `presupuesto` ni a\n        create_camino_booking_proposal sin los datos de contacto.\n        (es: iniciar_peticion_medida)",
+      "input_schema": {
+        "properties": {},
+        "title": "camino_trip_intake_formArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "camino_trip_intake_formDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false
+      }
+    },
+    {
+      "name": "create_camino_booking_proposal",
+      "title": "Create Ourway booking proposal",
+      "description": "Create the Ourway booking request for a quoted Camino de Santiago\n        package and return the customer's personal proposal link (valid 7\n        days) where they review the trip day by day, confirm and pay securely.\n        ONLY call it after the customer explicitly approves the itinerary and\n        the package total and gives real contact details (full name, email,\n        phone, nationality). Accepts no prices: only the signed offer from\n        quote_camino_package / swap_camino_hotel. / Crea la petición en Ourway\n        y devuelve el enlace de la propuesta (única llamada a la acción).\n        (es: crear_propuesta)",
+      "input_schema": {
+        "$defs": {
+          "DatosCliente": {
+            "properties": {
+              "nombre_completo": {
+                "description": "Nombre y apellidos del cliente",
+                "minLength": 5,
+                "title": "Nombre Completo",
+                "type": "string"
+              },
+              "email": {
+                "description": "Email real del cliente (recibirá la propuesta)",
+                "title": "Email",
+                "type": "string"
+              },
+              "telefono": {
+                "description": "Teléfono con prefijo internacional",
+                "title": "Telefono",
+                "type": "string"
+              },
+              "nacionalidad": {
+                "description": "Nacionalidad del cliente (determina el seguro)",
+                "title": "Nacionalidad",
+                "type": "string"
+              }
+            },
+            "required": [
+              "nombre_completo",
+              "email",
+              "telefono",
+              "nacionalidad"
+            ],
+            "title": "DatosCliente",
+            "type": "object"
+          },
+          "FormularioMedida": {
+            "description": "Espejo del bloque MEDIDA del formulario 'Camino a medida' de la web\n(api/procesar_solicitud_medida.php). Se serializa tal cual en\npeticiones_adicionales para que el CRS y su cotizador lo lean igual.",
+            "properties": {
+              "lodging_mode": {
+                "default": "rooms",
+                "enum": [
+                  "rooms",
+                  "shared"
+                ],
+                "title": "Lodging Mode",
+                "type": "string"
+              },
+              "rooms": {
+                "description": "Distribución por habitación",
+                "items": {
+                  "$ref": "#/$defs/HabitacionFormulario"
+                },
+                "title": "Rooms",
+                "type": "array"
+              },
+              "travel_type": {
+                "default": "a_pie",
+                "enum": [
+                  "a_pie",
+                  "en_bicicleta"
+                ],
+                "title": "Travel Type",
+                "type": "string"
+              },
+              "itinerary": {
+                "default": "experto",
+                "enum": [
+                  "experto",
+                  "propio"
+                ],
+                "title": "Itinerary",
+                "type": "string"
+              },
+              "accommodation": {
+                "default": "recomendado",
+                "enum": [
+                  "recomendado",
+                  "hoteles_encanto",
+                  "casas_rurales",
+                  "albergues"
+                ],
+                "title": "Accommodation",
+                "type": "string"
+              },
+              "board": {
+                "default": "BB",
+                "enum": [
+                  "RO",
+                  "BB",
+                  "HB",
+                  "FB"
+                ],
+                "title": "Board",
+                "type": "string"
+              },
+              "budget": {
+                "enum": [
+                  "sin_preferencia",
+                  "lt_500",
+                  "500_1000",
+                  "1000_1500",
+                  "gt_1500"
+                ],
+                "title": "Budget",
+                "type": "string"
+              },
+              "luggage": {
+                "default": "no_seguro",
+                "enum": [
+                  "si",
+                  "no",
+                  "no_seguro"
+                ],
+                "title": "Luggage",
+                "type": "string"
+              },
+              "contact_preference": {
+                "anyOf": [
+                  {
+                    "enum": [
+                      "whatsapp",
+                      "telefono",
+                      "email"
+                    ],
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Contact Preference"
+              },
+              "observations": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Observations"
+              }
+            },
+            "required": [
+              "rooms",
+              "budget"
+            ],
+            "title": "FormularioMedida",
+            "type": "object"
+          },
+          "HabitacionFormulario": {
+            "properties": {
+              "adults": {
+                "maximum": 6,
+                "minimum": 1,
+                "title": "Adults",
+                "type": "integer"
+              },
+              "child_ages": {
+                "items": {
+                  "type": "integer"
+                },
+                "title": "Child Ages",
+                "type": "array"
+              }
+            },
+            "required": [
+              "adults"
+            ],
+            "title": "HabitacionFormulario",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "cliente": {
+            "$ref": "#/$defs/DatosCliente"
+          },
+          "idioma_codigo": {
+            "title": "Idioma Codigo",
+            "type": "string"
+          },
+          "camino_slug": {
+            "title": "Camino Slug",
+            "type": "string"
+          },
+          "oferta_paquete_firmada": {
+            "title": "Oferta Paquete Firmada",
+            "type": "string"
+          },
+          "formulario": {
+            "$ref": "#/$defs/FormularioMedida"
+          },
+          "poblacion_inicio_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Poblacion Inicio Id"
+          },
+          "poblacion_inicio_nombre": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Poblacion Inicio Nombre"
+          }
+        },
+        "required": [
+          "cliente",
+          "idioma_codigo",
+          "camino_slug",
+          "oferta_paquete_firmada",
+          "formulario"
+        ],
+        "title": "create_camino_booking_proposalArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "create_camino_booking_proposalDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": false,
+        "idempotent_hint": false,
+        "open_world_hint": true
+      }
+    },
+    {
+      "name": "camino_proposal_status",
+      "title": "Booking proposal status",
+      "description": "Check the status of a Camino de Santiago booking proposal created\n        through this channel (code PET-123): active / confirmed / expired, plus\n        its link and deadline. Use it when the customer comes back asking about\n        \"my proposal\", \"my booking\" or gives a PET code. / Estado de una\n        propuesta creada por este canal. (es: estado_propuesta)",
+      "input_schema": {
+        "properties": {
+          "codigo": {
+            "title": "Codigo",
+            "type": "string"
+          }
+        },
+        "required": [
+          "codigo"
+        ],
+        "title": "camino_proposal_statusArguments",
+        "type": "object"
+      },
+      "output_schema": {
+        "additionalProperties": true,
+        "title": "camino_proposal_statusDictOutput",
+        "type": "object"
+      },
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "name": "plan_camino_de_santiago",
+      "title": "Plan & book a Camino de Santiago with Ourway",
+      "description": "Start the full plan → quote → book flow for a Camino de Santiago\n        trip (any route: Francés from Sarria, Portugués from Tui or Porto…).",
+      "arguments": [
+        {
+          "name": "request",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "planificar_camino",
+      "title": "Planificar un Camino de Santiago con Ourway",
+      "description": "Arranca el flujo completo de planificación, cotización y reserva.",
+      "arguments": [
+        {
+          "name": "peticion",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "camino_question",
+      "title": "Ask about the Camino de Santiago",
+      "description": "Ask any practical question about the Camino de Santiago (credential,\n        Compostela, best season, which route, how many days, luggage, kids…).",
+      "arguments": [
+        {
+          "name": "question",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "name": "metodologia",
+      "title": "Ourway methodology for the Camino de Santiago / Metodología Ourway",
+      "uri": "ourway://metodologia",
+      "description": "Complete guide: planning flow, Camino rules, Compostela minimums and\n        accommodation quality filters. / Guía completa del canal.",
+      "mime_type": "text/markdown"
+    },
+    {
+      "name": "camino_faq",
+      "title": "Camino de Santiago FAQ (es/en) — knowledge base",
+      "uri": "ourway://camino-faq",
+      "description": "Curated bilingual knowledge base behind camino_de_santiago_info:\n        credential, Compostela, 100 km rule, best season, routes, days needed,\n        luggage transfer, packing, kids, cycling, pets, budget, getting there.",
+      "mime_type": "application/json"
+    },
+    {
+      "name": "plantilla_itinerario",
+      "title": "Itinerary presentation template (HTML artifact)",
+      "uri": "ourway://plantilla-itinerario",
+      "description": "Esqueleto HTML/CSS/SVG con la identidad Ourway para presentar el\n        itinerario cotizado como artifact interactivo: mapa de la ruta, tabla\n        de etapas, tarjetas de hotel, extras, total único y CTA de reserva.\n        Instrucciones de relleno en el comentario de cabecera.",
+      "mime_type": "text/html"
+    }
+  ]
+}
