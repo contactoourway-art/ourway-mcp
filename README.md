@@ -1,5 +1,7 @@
 # Ourway – Camino de Santiago · MCP server
 
+[![mcptry](https://mcptry.com/badge/travel.ourway/camino-de-santiago)](https://mcptry.com/servers/travel.ourway/camino-de-santiago)
+
 [🇪🇸 Versión en español](README.es.md)
 
 **Plan, quote and book the Camino de Santiago from any AI assistant.** This is the official
