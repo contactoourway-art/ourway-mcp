@@ -3,8 +3,17 @@
   "name": "travel.ourway/camino-de-santiago",
   "title": "Ourway – Camino de Santiago",
   "description": "Plan, quote & book the Camino de Santiago: routes, stages, live hotels, one package price, FAQ.",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "websiteUrl": "https://ourway.travel/en/ai",
+  "icons": [
+    {
+      "src": "https://ourway.travel/media/favicon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "500x500"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/contactoourway-art/ourway-mcp",
     "source": "github"
