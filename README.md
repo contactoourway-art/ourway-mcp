@@ -65,7 +65,7 @@ claude mcp add --transport http ourway https://mcp.ourway.travel/mcp
 | `list_camino_routes` | Bookable routes with total km |
 | `camino_route_towns` | Towns along a route in trail order, cumulative km, coordinates |
 | `plan_camino_itinerary` | Day-by-day itinerary on the official stages + PNG route map |
-| `quote_camino_package` | One package price with live availability (1–3 min) |
+| `quote_camino_package` | One package price with live availability (20–45 s; cached retry) |
 | `camino_hotel_alternatives` | Up to 3 alternative hotels for one night |
 | `adjust_camino_package` | Cheaper / upgrade / more central / with breakfast |
 | `swap_camino_hotel` | Apply an alternative and get a new signed offer |

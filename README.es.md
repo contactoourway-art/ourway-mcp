@@ -63,7 +63,7 @@ claude mcp add --transport http ourway https://mcp.ourway.travel/mcp
 | `list_camino_routes` | Caminos reservables con km totales |
 | `camino_route_towns` | Poblaciones de una ruta en orden, km acumulados, coordenadas |
 | `plan_camino_itinerary` | Itinerario día a día sobre las etapas oficiales + mapa PNG |
-| `quote_camino_package` | Un precio de paquete con disponibilidad real (1–3 min) |
+| `quote_camino_package` | Un precio de paquete con disponibilidad real (20–45 s; reintento en caché) |
 | `camino_hotel_alternatives` | Hasta 3 hoteles alternativos para una noche |
 | `adjust_camino_package` | Más barato / más categoría / más céntrico / con desayuno |
 | `swap_camino_hotel` | Aplica una alternativa y devuelve una nueva oferta firmada |
